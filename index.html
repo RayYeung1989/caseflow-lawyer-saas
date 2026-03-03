@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CaseFlow - 律师案件与日程管理</title>
+  <meta name="description" content="专为律师打造的案件管理与日程预约系统">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1a1a2e;
+      background: #f8f9fa;
+    }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 2rem;
+    }
+    .container {
+      max-width: 800px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      color: #fff;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .hero h1 span {
+      color: #00d4ff;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      color: #a0a0b0;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+    .feature {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: left;
+    }
+    .feature h3 {
+      color: #00d4ff;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .feature p {
+      color: #808090;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+    .signup-form {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 480px;
+      margin: 0 auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .signup-form h2 {
+      color: #1a1a2e;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    .signup-form p {
+      color: #666;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .signup-form input {
+      flex: 1;
+      padding: 0.875rem 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    .signup-form input:focus {
+      outline: none;
+      border-color: #00d4ff;
+    }
+    .signup-form button {
+      padding: 0.875rem 1.5rem;
+      background: #00d4ff;
+      color: #1a1a2e;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .signup-form button:hover {
+      background: #00b8e6;
+      transform: translateY(-2px);
+    }
+    .signup-form button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .success-message {
+      display: none;
+      color: #00c853;
+      padding: 1rem;
+      background: #e8f5e9;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    .error-message {
+      display: none;
+      color: #d32f2f;
+      padding: 1rem;
+      background: #ffebee;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    .price {
+      color: #00d4ff;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 2rem 0 0.5rem;
+    }
+    .price span {
+      font-size: 1rem;
+      color: #808090;
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="container">
+      <h1>Case<span>Flow</span></h1>
+      <p>专为律师打造的案件管理与日程预约系统，让办案更高效</p>
+
+      <div class="features">
+        <div class="feature">
+          <h3>📁 案件管理</h3>
+          <p>案件进度一目了然，客户信息安全存储</p>
+        </div>
+        <div class="feature">
+          <h3>📅 智能日程</h3>
+          <p>在线预约排期，自动提醒不再错过</p>
+        </div>
+        <div class="feature">
+          <h3>💬 客户沟通</h3>
+          <p>内置沟通记录，案件讨论有据可查</p>
+        </div>
+      </div>
+
+      <div class="price">$29<span>/月</span></div>
+
+      <div class="signup-form">
+        <h2>加入等待列表</h2>
+        <p>限量开放 Bird Early 资格，前 100 名享首年 5 折</p>
+        <form id="signupForm">
+          <div class="input-group">
+            <input type="email" id="email" placeholder="输入您的邮箱" required>
+            <button type="submit" id="submitBtn">加入</button>
+          </div>
+        </form>
+        <div class="success-message" id="successMessage">
+          ✅ 已加入！我们会尽快通知您
+        </div>
+        <div class="error-message" id="errorMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('signupForm');
+    const emailInput = document.getElementById('email');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Simple waitlist storage (localStorage for demo)
+    const getWaitlist = () => JSON.parse(localStorage.getItem('waitlist') || '[]');
+    const saveToWaitlist = (email) => {
+      const list = getWaitlist();
+      list.push({ email, timestamp: Date.now() });
+      localStorage.setItem('waitlist', JSON.stringify(list));
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+
+      if (!email) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '...';
+      successMessage.style.display = 'none';
+      errorMessage.style.display = 'none';
+
+      try {
+        // Simulate API call (replace with real endpoint)
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        // Save locally for demo
+        saveToWaitlist(email);
+
+        // Log for debugging
+        console.log('New signup:', email);
+
+        successMessage.style.display = 'block';
+        form.reset();
+      } catch (err) {
+        errorMessage.textContent = '提交失败，请重试';
+        errorMessage.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '加入';
+      }
+    });
+  </script>
+</body>
+</html>
