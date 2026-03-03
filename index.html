@@ -173,6 +173,10 @@
       <div class="signup-form">
         <h2>加入等待列表</h2>
         <p>限量开放 Bird Early 资格，前 100 名享首年 5 折</p>
+        <a href="https://forms.gle/your-form-id" target="_blank" class="google-form-link" style="display: block; background: #4285f4; color: #fff; padding: 1rem; border-radius: 8px; text-decoration: none; font-weight: 600; margin-bottom: 1rem;">
+          📋 填写 Google Form 注册
+        </a>
+        <p style="font-size: 0.8rem; color: #999; margin-bottom: 1rem;">或直接输入邮箱：</p>
         <form id="signupForm">
           <div class="input-group">
             <input type="email" id="email" placeholder="输入您的邮箱" required>
@@ -194,7 +198,9 @@
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
 
-    // Simple waitlist storage (localStorage for demo)
+    // Web3Forms - free form service, no account needed
+    const WEB3FORMS_ACCESS_KEY = 'a4bb5c9e-8f10-4b2c-9e2a-7b3c5d6e8f9a';
+
     const getWaitlist = () => JSON.parse(localStorage.getItem('waitlist') || '[]');
     const saveToWaitlist = (email) => {
       const list = getWaitlist();
@@ -214,10 +220,22 @@
       errorMessage.style.display = 'none';
 
       try {
-        // Simulate API call (replace with real endpoint)
-        await new Promise(resolve => setTimeout(resolve, 800));
+        // Submit to Web3Forms API
+        const formData = new FormData();
+        formData.append('access_key', WEB3FORMS_ACCESS_KEY);
+        formData.append('email', email);
+        formData.append('subject', 'New CaseFlow Waitlist Signup');
+        formData.append('from', email);
 
-        // Save locally for demo
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (!result.success) throw new Error('Submission failed');
+
+        // Also save locally for demo
         saveToWaitlist(email);
 
         // Log for debugging
