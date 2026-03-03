@@ -1,0 +1,21 @@
+name: "PR Size Labeler"
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label PR size
+        uses: RayYeung1989/pr-size-labeler@v1.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          xs_label: "size/xs"
+          s_label: "size/s"
+          m_label: "size/m"
+          l_label: "size/l"
+          xl_label: "size/xl"
+          fail_if_xl: "false"
+          xl_threshold: "1000"
