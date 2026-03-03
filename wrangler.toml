@@ -1,7 +1,19 @@
-name = "caseflow-waitlist"
+name = "caseflow-lawyer"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
 [[kv_namespaces]]
 binding = "WAITLIST_KV"
 id = "waitlist"
+
+[[kv_namespaces]]
+binding = "CASES_KV"
+id = "cases"
+
+[[kv_namespaces]]
+binding = "SCHEDULES_KV"
+id = "schedules"
+
+[[kv_namespaces]]
+binding = "CLIENTS_KV"
+id = "clients"

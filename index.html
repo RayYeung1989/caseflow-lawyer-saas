@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CaseFlow - 律师案件与日程管理</title>
+  <title>CaseFlow - 律师案件管理系统</title>
   <meta name="description" content="专为律师打造的案件管理与日程预约系统">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,246 +11,754 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       line-height: 1.6;
       color: #1a1a2e;
-      background: #f8f9fa;
+      background: #f5f7fa;
     }
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
+    /* Header */
+    .header {
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      padding: 2rem;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-    .container {
-      max-width: 800px;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 3.5rem;
+    .logo {
       color: #fff;
-      margin-bottom: 1rem;
+      font-size: 1.5rem;
       font-weight: 700;
     }
-    .hero h1 span {
+    .logo span { color: #00d4ff; }
+    .nav { display: flex; gap: 1rem; }
+    .nav button {
+      background: transparent;
+      border: none;
+      color: #a0a0b0;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .nav button:hover, .nav button.active { color: #00d4ff; }
+
+    /* Main */
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
       color: #00d4ff;
     }
-    .hero p {
-      font-size: 1.25rem;
-      color: #a0a0b0;
-      margin-bottom: 2rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
     }
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin: 3rem 0;
-    }
-    .feature {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+
+    /* Section */
+    .section {
+      background: #fff;
       border-radius: 12px;
       padding: 1.5rem;
-      text-align: left;
-    }
-    .feature h3 {
-      color: #00d4ff;
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-    .feature p {
-      color: #808090;
-      font-size: 0.9rem;
-      margin: 0;
-    }
-    .signup-form {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 16px;
-      max-width: 480px;
-      margin: 0 auto;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-    .signup-form h2 {
-      color: #1a1a2e;
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-    }
-    .signup-form p {
-      color: #666;
       margin-bottom: 1.5rem;
-      font-size: 0.95rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    .input-group {
+    .section-header {
       display: flex;
-      gap: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
     }
-    .signup-form input {
-      flex: 1;
-      padding: 0.875rem 1rem;
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    /* Forms */
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #333;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
       border: 2px solid #e0e0e0;
       border-radius: 8px;
       font-size: 1rem;
       transition: border-color 0.2s;
     }
-    .signup-form input:focus {
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
       outline: none;
       border-color: #00d4ff;
     }
-    .signup-form button {
-      padding: 0.875rem 1.5rem;
-      background: #00d4ff;
-      color: #1a1a2e;
+
+    /* Buttons */
+    .btn {
+      padding: 0.75rem 1.5rem;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
+      transition: all 0.2s;
     }
-    .signup-form button:hover {
-      background: #00b8e6;
-      transform: translateY(-2px);
+    .btn-primary {
+      background: #00d4ff;
+      color: #1a1a2e;
     }
-    .signup-form button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
+    .btn-primary:hover { background: #00b8e6; }
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
     }
-    .success-message {
-      display: none;
-      color: #00c853;
+    .btn-secondary:hover { background: #e0e0e0; }
+    .btn-danger {
+      background: #ff4757;
+      color: #fff;
+    }
+    .btn-danger:hover { background: #ff3344; }
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
       padding: 1rem;
-      background: #e8f5e9;
-      border-radius: 8px;
-      margin-top: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
     }
-    .error-message {
+    th {
+      font-weight: 600;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    tr:hover { background: #f9f9f9; }
+
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .badge-active { background: #e8f5e9; color: #2e7d32; }
+    .badge-pending { background: #fff3e0; color: #ef6c00; }
+    .badge-closed { background: #f5f5f5; color: #666; }
+    .badge-high { background: #ffebee; color: #c62828; }
+    .badge-medium { background: #fff3e0; color: #ef6c00; }
+    .badge-low { background: #e3f2fd; color: #1565c0; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
       display: none;
-      color: #d32f2f;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .modal-title { font-size: 1.25rem; font-weight: 600; }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+
+    /* Messages */
+    .message {
       padding: 1rem;
-      background: #ffebee;
       border-radius: 8px;
-      margin-top: 1rem;
+      margin-bottom: 1rem;
+      display: none;
     }
-    .price {
-      color: #00d4ff;
-      font-size: 2rem;
-      font-weight: 700;
-      margin: 2rem 0 0.5rem;
+    .message.show { display: block; }
+    .message-success { background: #e8f5e9; color: #2e7d32; }
+    .message-error { background: #ffebee; color: #c62828; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #999;
     }
-    .price span {
-      font-size: 1rem;
-      color: #808090;
-      font-weight: 400;
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header { flex-direction: column; gap: 1rem; }
+      .main { padding: 1rem; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      table { display: block; overflow-x: auto; }
     }
   </style>
 </head>
 <body>
-  <div class="hero">
-    <div class="container">
-      <h1>Case<span>Flow</span></h1>
-      <p>专为律师打造的案件管理与日程预约系统，让办案更高效</p>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">Case<span>Flow</span></div>
+    <nav class="nav">
+      <button class="active" data-view="dashboard">仪表盘</button>
+      <button data-view="cases">案件管理</button>
+      <button data-view="schedules">日程安排</button>
+      <button data-view="clients">客户管理</button>
+    </nav>
+  </header>
 
-      <div class="features">
-        <div class="feature">
-          <h3>📁 案件管理</h3>
-          <p>案件进度一目了然，客户信息安全存储</p>
+  <main class="main">
+    <!-- Dashboard View -->
+    <div id="view-dashboard">
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-cases">0</div>
+          <div class="stat-label">案件总数</div>
         </div>
-        <div class="feature">
-          <h3>📅 智能日程</h3>
-          <p>在线预约排期，自动提醒不再错过</p>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-schedules">0</div>
+          <div class="stat-label">待办日程</div>
         </div>
-        <div class="feature">
-          <h3>💬 客户沟通</h3>
-          <p>内置沟通记录，案件讨论有据可查</p>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-clients">0</div>
+          <div class="stat-label">客户总数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-waitlist">0</div>
+          <div class="stat-label">等待名单</div>
         </div>
       </div>
 
-      <div class="price">$29<span>/月</span></div>
-
-      <div class="signup-form">
-        <h2>加入等待列表</h2>
-        <p>限量开放 Bird Early 资格，前 100 名享首年 5 折</p>
-        <a href="https://forms.gle/your-form-id" target="_blank" class="google-form-link" style="display: block; background: #4285f4; color: #fff; padding: 1rem; border-radius: 8px; text-decoration: none; font-weight: 600; margin-bottom: 1rem;">
-          📋 填写 Google Form 注册
-        </a>
-        <p style="font-size: 0.8rem; color: #999; margin-bottom: 1rem;">或直接输入邮箱：</p>
-        <form id="signupForm">
-          <div class="input-group">
-            <input type="email" id="email" placeholder="输入您的邮箱" required>
-            <button type="submit" id="submitBtn">加入</button>
-          </div>
-        </form>
-        <div class="success-message" id="successMessage">
-          ✅ 已加入！我们会尽快通知您
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">最近案件</h2>
+          <button class="btn btn-primary btn-sm" onclick="showView('cases')">查看全部</button>
         </div>
-        <div class="error-message" id="errorMessage"></div>
+        <div id="recent-cases"></div>
       </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">即将到来的日程</h2>
+          <button class="btn btn-primary btn-sm" onclick="showView('schedules')">查看全部</button>
+        </div>
+        <div id="upcoming-schedules"></div>
+      </div>
+    </div>
+
+    <!-- Cases View -->
+    <div id="view-cases" style="display: none;">
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">案件管理</h2>
+          <button class="btn btn-primary" onclick="openCaseModal()">+ 新建案件</button>
+        </div>
+        <div id="cases-list"></div>
+      </div>
+    </div>
+
+    <!-- Schedules View -->
+    <div id="view-schedules" style="display: none;">
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">日程安排</h2>
+          <button class="btn btn-primary" onclick="openScheduleModal()">+ 新建日程</button>
+        </div>
+        <div id="schedules-list"></div>
+      </div>
+    </div>
+
+    <!-- Clients View -->
+    <div id="view-clients" style="display: none;">
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">客户管理</h2>
+          <button class="btn btn-primary" onclick="openClientModal()">+ 新建客户</button>
+        </div>
+        <div id="clients-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Case Modal -->
+  <div class="modal-overlay" id="case-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="case-modal-title">新建案件</h3>
+        <button class="modal-close" onclick="closeModal('case-modal')">&times;</button>
+      </div>
+      <form id="case-form" onsubmit="saveCase(event)">
+        <input type="hidden" id="case-id">
+        <div class="form-group">
+          <label>案件标题 *</label>
+          <input type="text" id="case-title" required>
+        </div>
+        <div class="form-group">
+          <label>客户姓名</label>
+          <input type="text" id="case-client">
+        </div>
+        <div class="form-group">
+          <label>案件描述</label>
+          <textarea id="case-description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>状态</label>
+          <select id="case-status">
+            <option value="active">进行中</option>
+            <option value="pending">待处理</option>
+            <option value="closed">已结案</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>优先级</label>
+          <select id="case-priority">
+            <option value="high">高</option>
+            <option value="medium">中</option>
+            <option value="low">低</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">保存</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Schedule Modal -->
+  <div class="modal-overlay" id="schedule-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">新建日程</h3>
+        <button class="modal-close" onclick="closeModal('schedule-modal')">&times;</button>
+      </div>
+      <form id="schedule-form" onsubmit="saveSchedule(event)">
+        <div class="form-group">
+          <label>日程标题 *</label>
+          <input type="text" id="schedule-title" required>
+        </div>
+        <div class="form-group">
+          <label>关联案件</label>
+          <select id="schedule-case">
+            <option value="">无</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>客户姓名</label>
+          <input type="text" id="schedule-client">
+        </div>
+        <div class="form-group">
+          <label>时间 *</label>
+          <input type="datetime-local" id="schedule-time" required>
+        </div>
+        <div class="form-group">
+          <label>时长（分钟）</label>
+          <input type="number" id="schedule-duration" value="60">
+        </div>
+        <div class="form-group">
+          <label>备注</label>
+          <textarea id="schedule-notes" rows="2"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">保存</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Client Modal -->
+  <div class="modal-overlay" id="client-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">新建客户</h3>
+        <button class="modal-close" onclick="closeModal('client-modal')">&times;</button>
+      </div>
+      <form id="client-form" onsubmit="saveClient(event)">
+        <div class="form-group">
+          <label>姓名 *</label>
+          <input type="text" id="client-name" required>
+        </div>
+        <div class="form-group">
+          <label>邮箱</label>
+          <input type="email" id="client-email">
+        </div>
+        <div class="form-group">
+          <label>电话</label>
+          <input type="tel" id="client-phone">
+        </div>
+        <div class="form-group">
+          <label>公司/机构</label>
+          <input type="text" id="client-company">
+        </div>
+        <div class="form-group">
+          <label>备注</label>
+          <textarea id="client-notes" rows="2"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">保存</button>
+      </form>
     </div>
   </div>
 
   <script>
-    const form = document.getElementById('signupForm');
-    const emailInput = document.getElementById('email');
-    const submitBtn = document.getElementById('submitBtn');
-    const successMessage = document.getElementById('successMessage');
-    const errorMessage = document.getElementById('errorMessage');
-
-    // Web3Forms - free form service, no account needed
-    const WEB3FORMS_ACCESS_KEY = 'a4bb5c9e-8f10-4b2c-9e2a-7b3c5d6e8f9a';
-
-    const getWaitlist = () => JSON.parse(localStorage.getItem('waitlist') || '[]');
-    const saveToWaitlist = (email) => {
-      const list = getWaitlist();
-      list.push({ email, timestamp: Date.now() });
-      localStorage.setItem('waitlist', JSON.stringify(list));
+    // ============== Data Store (localStorage) ==============
+    const store = {
+      get(key) {
+        return JSON.parse(localStorage.getItem('caseflow_' + key) || '[]');
+      },
+      set(key, data) {
+        localStorage.setItem('caseflow_' + key, JSON.stringify(data));
+      }
     };
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = emailInput.value.trim();
+    // ============== UI Functions ==============
+    function showView(view) {
+      document.querySelectorAll('.main > div').forEach(div => div.style.display = 'none');
+      document.getElementById('view-' + view).style.display = 'block';
+      document.querySelectorAll('.nav button').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`[data-view="${view}"]`).classList.add('active');
 
-      if (!email) return;
+      if (view === 'dashboard') renderDashboard();
+      if (view === 'cases') renderCases();
+      if (view === 'schedules') renderSchedules();
+      if (view === 'clients') renderClients();
+    }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = '...';
-      successMessage.style.display = 'none';
-      errorMessage.style.display = 'none';
+    function openModal(id) {
+      document.getElementById(id).classList.add('show');
+    }
 
-      try {
-        // Submit to Web3Forms API
-        const formData = new FormData();
-        formData.append('access_key', WEB3FORMS_ACCESS_KEY);
-        formData.append('email', email);
-        formData.append('subject', 'New CaseFlow Waitlist Signup');
-        formData.append('from', email);
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
 
-        const response = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          body: formData
-        });
+    // ============== Dashboard ==============
+    function renderDashboard() {
+      const cases = store.get('cases');
+      const schedules = store.get('schedules');
+      const clients = store.get('clients');
+      const waitlist = store.get('waitlist');
 
-        const result = await response.json();
-        if (!result.success) throw new Error('Submission failed');
+      document.getElementById('stat-cases').textContent = cases.length;
+      document.getElementById('stat-schedules').textContent = schedules.length;
+      document.getElementById('stat-clients').textContent = clients.length;
+      document.getElementById('stat-waitlist').textContent = waitlist.length;
 
-        // Also save locally for demo
-        saveToWaitlist(email);
-
-        // Log for debugging
-        console.log('New signup:', email);
-
-        successMessage.style.display = 'block';
-        form.reset();
-      } catch (err) {
-        errorMessage.textContent = '提交失败，请重试';
-        errorMessage.style.display = 'block';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = '加入';
+      // Recent cases
+      const recentCases = cases.slice(-5).reverse();
+      if (recentCases.length === 0) {
+        document.getElementById('recent-cases').innerHTML = '<div class="empty-state">暂无案件</div>';
+      } else {
+        document.getElementById('recent-cases').innerHTML = `
+          <table>
+            <thead><tr><th>标题</th><th>客户</th><th>状态</th><th>优先级</th></tr></thead>
+            <tbody>
+              ${recentCases.map(c => `
+                <tr>
+                  <td>${c.title}</td>
+                  <td>${c.client_name || '-'}</td>
+                  <td><span class="badge badge-${c.status}">${c.status === 'active' ? '进行中' : c.status === 'pending' ? '待处理' : '已结案'}</span></td>
+                  <td><span class="badge badge-${c.priority}">${c.priority === 'high' ? '高' : c.priority === 'medium' ? '中' : '低'}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
       }
+
+      // Upcoming schedules
+      const now = Date.now();
+      const upcoming = schedules.filter(s => s.scheduled_at > now).slice(0, 5);
+      if (upcoming.length === 0) {
+        document.getElementById('upcoming-schedules').innerHTML = '<div class="empty-state">暂无即将到来的日程</div>';
+      } else {
+        document.getElementById('upcoming-schedules').innerHTML = `
+          <table>
+            <thead><tr><th>标题</th><th>客户</th><th>时间</th><th>时长</th></tr></thead>
+            <tbody>
+              ${upcoming.map(s => `
+                <tr>
+                  <td>${s.title}</td>
+                  <td>${s.client_name || '-'}</td>
+                  <td>${new Date(s.scheduled_at).toLocaleString('zh-CN')}</td>
+                  <td>${s.duration}分钟</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+    }
+
+    // ============== Cases ==============
+    function renderCases() {
+      const cases = store.get('cases');
+      if (cases.length === 0) {
+        document.getElementById('cases-list').innerHTML = '<div class="empty-state">暂无案件，点击"新建案件"开始</div>';
+        return;
+      }
+      document.getElementById('cases-list').innerHTML = `
+        <table>
+          <thead><tr><th>标题</th><th>客户</th><th>状态</th><th>优先级</th><th>操作</th></tr></thead>
+          <tbody>
+            ${cases.map(c => `
+              <tr>
+                <td>${c.title}</td>
+                <td>${c.client_name || '-'}</td>
+                <td><span class="badge badge-${c.status}">${c.status === 'active' ? '进行中' : c.status === 'pending' ? '待处理' : '已结案'}</span></td>
+                <td><span class="badge badge-${c.priority}">${c.priority === 'high' ? '高' : c.priority === 'medium' ? '中' : '低'}</span></td>
+                <td>
+                  <button class="btn btn-secondary btn-sm" onclick="editCase('${c.id}')">编辑</button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteCase('${c.id}')">删除</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function openCaseModal(id = null) {
+      document.getElementById('case-modal-title').textContent = id ? '编辑案件' : '新建案件';
+      document.getElementById('case-id').value = id || '';
+      if (id) {
+        const cases = store.get('cases');
+        const c = cases.find(x => x.id === id);
+        if (c) {
+          document.getElementById('case-title').value = c.title;
+          document.getElementById('case-client').value = c.client_name || '';
+          document.getElementById('case-description').value = c.description || '';
+          document.getElementById('case-status').value = c.status || 'active';
+          document.getElementById('case-priority').value = c.priority || 'medium';
+        }
+      } else {
+        document.getElementById('case-form').reset();
+      }
+      openModal('case-modal');
+    }
+
+    function saveCase(e) {
+      e.preventDefault();
+      const id = document.getElementById('case-id').value;
+      const cases = store.get('cases');
+      const now = Date.now();
+
+      if (id) {
+        const idx = cases.findIndex(c => c.id === id);
+        if (idx !== -1) {
+          cases[idx] = { ...cases[idx],
+            title: document.getElementById('case-title').value,
+            client_name: document.getElementById('case-client').value,
+            description: document.getElementById('case-description').value,
+            status: document.getElementById('case-status').value,
+            priority: document.getElementById('case-priority').value,
+            updated_at: now
+          };
+        }
+      } else {
+        cases.push({
+          id: crypto.randomUUID(),
+          title: document.getElementById('case-title').value,
+          client_name: document.getElementById('case-client').value,
+          description: document.getElementById('case-description').value,
+          status: document.getElementById('case-status').value,
+          priority: document.getElementById('case-priority').value,
+          created_at: now,
+          updated_at: now
+        });
+      }
+
+      store.set('cases', cases);
+      closeModal('case-modal');
+      renderCases();
+      renderDashboard();
+    }
+
+    function editCase(id) { openCaseModal(id); }
+
+    function deleteCase(id) {
+      if (confirm('确定删除此案件？')) {
+        let cases = store.get('cases');
+        cases = cases.filter(c => c.id !== id);
+        store.set('cases', cases);
+        renderCases();
+        renderDashboard();
+      }
+    }
+
+    // ============== Schedules ==============
+    function renderSchedules() {
+      const schedules = store.get('schedules').sort((a, b) => (a.scheduled_at || 0) - (b.scheduled_at || 0));
+      if (schedules.length === 0) {
+        document.getElementById('schedules-list').innerHTML = '<div class="empty-state">暂无日程，点击"新建日程"开始</div>';
+        return;
+      }
+      document.getElementById('schedules-list').innerHTML = `
+        <table>
+          <thead><tr><th>标题</th><th>客户</th><th>时间</th><th>时长</th><th>操作</th></tr></thead>
+          <tbody>
+            ${schedules.map(s => `
+              <tr>
+                <td>${s.title}</td>
+                <td>${s.client_name || '-'}</td>
+                <td>${new Date(s.scheduled_at).toLocaleString('zh-CN')}</td>
+                <td>${s.duration}分钟</td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteSchedule('${s.id}')">删除</button></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function openScheduleModal() {
+      // Populate case dropdown
+      const cases = store.get('cases');
+      document.getElementById('schedule-case').innerHTML = '<option value="">无</option>' +
+        cases.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+      document.getElementById('schedule-form').reset();
+      openModal('schedule-modal');
+    }
+
+    function saveSchedule(e) {
+      e.preventDefault();
+      const schedules = store.get('schedules');
+      const caseId = document.getElementById('schedule-case').value;
+      const caseName = caseId ? (store.get('cases').find(c => c.id === caseId)?.title || '') : '';
+
+      schedules.push({
+        id: crypto.randomUUID(),
+        title: document.getElementById('schedule-title').value,
+        case_id: caseId,
+        case_name: caseName,
+        client_name: document.getElementById('schedule-client').value,
+        scheduled_at: new Date(document.getElementById('schedule-time').value).getTime(),
+        duration: parseInt(document.getElementById('schedule-duration').value),
+        notes: document.getElementById('schedule-notes').value,
+        created_at: Date.now()
+      });
+
+      store.set('schedules', schedules);
+      closeModal('schedule-modal');
+      renderSchedules();
+      renderDashboard();
+    }
+
+    function deleteSchedule(id) {
+      if (confirm('确定删除此时程？')) {
+        let schedules = store.get('schedules');
+        schedules = schedules.filter(s => s.id !== id);
+        store.set('schedules', schedules);
+        renderSchedules();
+        renderDashboard();
+      }
+    }
+
+    // ============== Clients ==============
+    function renderClients() {
+      const clients = store.get('clients');
+      if (clients.length === 0) {
+        document.getElementById('clients-list').innerHTML = '<div class="empty-state">暂无客户，点击"新建客户"开始</div>';
+        return;
+      }
+      document.getElementById('clients-list').innerHTML = `
+        <table>
+          <thead><tr><th>姓名</th><th>邮箱</th><th>电话</th><th>公司</th><th>操作</th></tr></thead>
+          <tbody>
+            ${clients.map(c => `
+              <tr>
+                <td>${c.name}</td>
+                <td>${c.email || '-'}</td>
+                <td>${c.phone || '-'}</td>
+                <td>${c.company || '-'}</td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteClient('${c.id}')">删除</button></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function openClientModal() {
+      document.getElementById('client-form').reset();
+      openModal('client-modal');
+    }
+
+    function saveClient(e) {
+      e.preventDefault();
+      const clients = store.get('clients');
+
+      clients.push({
+        id: crypto.randomUUID(),
+        name: document.getElementById('client-name').value,
+        email: document.getElementById('client-email').value,
+        phone: document.getElementById('client-phone').value,
+        company: document.getElementById('client-company').value,
+        notes: document.getElementById('client-notes').value,
+        created_at: Date.now()
+      });
+
+      store.set('clients', clients);
+      closeModal('client-modal');
+      renderClients();
+      renderDashboard();
+    }
+
+    function deleteClient(id) {
+      if (confirm('确定删除此客户？')) {
+        let clients = store.get('clients');
+        clients = clients.filter(c => c.id !== id);
+        store.set('clients', clients);
+        renderClients();
+        renderDashboard();
+      }
+    }
+
+    // ============== Init ==============
+    document.querySelectorAll('.nav button').forEach(btn => {
+      btn.addEventListener('click', () => showView(btn.dataset.view));
     });
+
+    // Initialize dashboard
+    renderDashboard();
   </script>
 </body>
 </html>
